@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, UrlTree } from '@angular/router';
 
 // rxjs
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
+import { CanComponentDeactivate, DialogService } from 'src/app/core';
 import { UserModel } from './../../models/user.model';
 import { UserArrayService } from './../../services/user-array.service';
 
@@ -11,7 +12,7 @@ import { UserArrayService } from './../../services/user-array.service';
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.css'],
 })
-export class UserFormComponent implements OnInit, OnDestroy {
+export class UserFormComponent implements OnInit, OnDestroy, CanComponentDeactivate  {
   user: UserModel;
   originalUser: UserModel;
 
@@ -20,7 +21,8 @@ export class UserFormComponent implements OnInit, OnDestroy {
   constructor(
     private userArrayService: UserArrayService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private dialogService: DialogService
   ) { }
 
   ngOnInit(): void {
@@ -58,4 +60,26 @@ export class UserFormComponent implements OnInit, OnDestroy {
   onGoBack() {
     this.router.navigate(['./../../'], { relativeTo: this.route});
   }
+
+  canDeactivate():
+    | Observable<boolean | UrlTree>
+    | Promise<boolean | UrlTree>
+    | boolean
+    | UrlTree {
+    const flags = Object.keys(this.originalUser).map(key => {
+      if (this.originalUser[key] === this.user[key]) {
+        return true;
+      }
+      return false;
+    });
+
+    if (flags.every(el => el)) {
+      return true;
+    }
+
+    // Otherwise ask the user with the dialog service and return its
+    // promise which resolves to true or false when the user decides
+    return this.dialogService.confirm('Discard changes?');
+  }
+
 }

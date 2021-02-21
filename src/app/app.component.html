@@ -16,7 +16,13 @@
               <ul class="nav navbar-nav">
                 <li routerLinkActive="active">
                   <a routerLink="/users">Users</a>
-                </li>         
+                </li>
+                <li routerLinkActive="active">
+                  <a routerLink="/admin">Admin</a>
+                </li>
+                <li routerLinkActive="active">
+                  <a routerLink="/login">Login</a>
+                </li>
                 <li routerLinkActive="active">
                   <a routerLink="/about">About</a>
                 </li>
@@ -39,10 +45,10 @@
                       *ngIf="!messagesService.isDisplayed"
                       (click)="onDisplayMessages()">
                 Show Messages
-              </button>    
+              </button>
               <router-outlet name="messages"></router-outlet>
           </div>
       </div>
-     
+
     </div>
 </div>

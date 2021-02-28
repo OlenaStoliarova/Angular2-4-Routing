@@ -1,12 +1,28 @@
 import { NgModule } from '@angular/core';
+import { MetaDefinition } from '@angular/platform-browser';
 import { Routes, RouterModule } from '@angular/router';
 
 import { TaskListComponent, TaskFormComponent } from './components';
 
+const metaTags: Array<MetaDefinition> = [
+  {
+    name: 'description',
+    content: 'Task Manager Application. This is SPA'
+  },
+  {
+    name: 'keywords',
+    content: 'Angular tutorial, SPA, Routing'
+  }
+];
+
 const routes: Routes = [
   {
     path: 'home',
-    component: TaskListComponent
+    component: TaskListComponent,
+    data: {
+      title: 'Task Manager',
+      meta: metaTags
+    }      
   },
   {
     path: 'edit/:taskID',
